@@ -23,6 +23,14 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
 
+    [SerializeField]
+    private float thrusterFuelBurnSpeed = 1f;
+
+    [SerializeField]
+    private float thrusterFuelRegenSpeed = 0.3f;
+
+    private float thrusterFuelAmount = 1f;
+
     [Header("JointOptions")]
 
     [SerializeField]
@@ -39,8 +47,25 @@ public class PlayerController : MonoBehaviour
         SetJointSettings(jointSpring);
     }
 
+    public float GetThrusterFuelAmount()
+    {
+        return thrusterFuelAmount;
+    }
+
     private void Update()
     {
+        RaycastHit _hit;
+
+
+        if(Physics.Raycast(transform.position,Vector3.down,out _hit,100f) )
+        {
+            joint.targetPosition = new Vector3( 0f , -_hit.point.y , 0f );
+        }
+        else
+        {
+            joint.targetPosition = new Vector3(0f, 0f, 0f);
+        }
+
 
         // -1 = Touche négative , 0 = Pas de mouvement , 1 = Touche positive
 
@@ -87,18 +112,30 @@ public class PlayerController : MonoBehaviour
 
         //SAUT
 
-        if(Input.GetButton("Jump"))
+        if(Input.GetButton("Jump") && thrusterFuelAmount > 0)
         {
-            thrusterVelocity = Vector3.up * thrusterForce;
+            //On consomme le fuel
+            thrusterFuelAmount -= thrusterFuelBurnSpeed * Time.deltaTime;
 
-            //Enlève la gravité
-            SetJointSettings(0f);
+            if (thrusterFuelAmount >= 0.01f)
+            {
+                // Puissance de décolage
+                thrusterVelocity = Vector3.up * thrusterForce;
+
+                //Enlève la gravité
+                SetJointSettings(0f);
+            }
         }
         else
         {
+            // On regen le fuel
+            thrusterFuelAmount += thrusterFuelRegenSpeed * Time.deltaTime;
+
             //Ré-active la gravité
             SetJointSettings(jointSpring);
         }
+
+        thrusterFuelAmount = Mathf.Clamp(thrusterFuelAmount, 0f, 1f);
 
         motor.ApplyThruster(thrusterVelocity);
 

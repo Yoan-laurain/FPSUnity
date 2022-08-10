@@ -9,7 +9,17 @@ public class PlayerSetUp : NetworkBehaviour
     [SerializeField]
     private string remoteLayerName = "RemotePlayer";
 
-    Camera sceneCamera;
+    [SerializeField]
+    private string dontDrawLayerName = "DontDraw";
+
+    [SerializeField]
+    private GameObject playerGraphics;
+
+    [SerializeField]
+    private GameObject playerUIPrefab;
+
+    [HideInInspector]
+    public GameObject playerUIInstance;
 
     private void Start()
     {
@@ -21,13 +31,24 @@ public class PlayerSetUp : NetworkBehaviour
         }
         else
         {
-            sceneCamera = Camera.main;
+            // On applique le layher pour ne pas afficher notre perso à notre camera
 
-            //On désactive la camera de pre-spawn
-            sceneCamera.gameObject.SetActive(false);
+            Util.SetLayerRecursively(playerGraphics, LayerMask.NameToLayer(dontDrawLayerName) );
+
+            //Player UI
+            playerUIInstance = Instantiate(playerUIPrefab);
+
+            // Configuration du UI
+            PlayerUI ui = playerUIInstance.GetComponent<PlayerUI>();
+
+            if(ui != null)
+            {
+                ui.SetController(GetComponent<PlayerController>());
+            }
+
+            GetComponent<Player>().SetUp();
         }
 
-        GetComponent<Player>().SetUp();
     }
 
     public override void OnStartClient()
@@ -57,10 +78,11 @@ public class PlayerSetUp : NetworkBehaviour
 
     private void OnDisable()
     {
-        if(sceneCamera != null)
+        Destroy(playerUIInstance);
+
+        if(isLocalPlayer)
         {
-            //On réactive la camera de pre-spawn
-            sceneCamera.gameObject.SetActive(true);
+            GameManager.instance.SetSceneCameraActive(true);
         }
 
         //Retire le joueur de la liste des joueurs

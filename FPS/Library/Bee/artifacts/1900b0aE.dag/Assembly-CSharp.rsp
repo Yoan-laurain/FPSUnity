@@ -394,6 +394,8 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/where-allocations.ref.dll"
 "Assets/ParticleSystems/Scripts/AfterburnerPhysicsForce.cs"
+"Assets/ParticleSystems/Scripts/ExplosionPhysicsForce.cs"
+"Assets/ParticleSystems/Scripts/ParticleSystemMultiplier.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/LimitFPS.cs"
 "Assets/Scripts/MatchSettings.cs"
@@ -402,7 +404,11 @@
 "Assets/Scripts/PlayerMotor.cs"
 "Assets/Scripts/PlayerSetUp.cs"
 "Assets/Scripts/PlayerShoot.cs"
+"Assets/Scripts/PlayerUI.cs"
 "Assets/Scripts/PlayerWeapon.cs"
+"Assets/Scripts/Util.cs"
+"Assets/Scripts/WeaponGraphics.cs"
+"Assets/Scripts/WeaponManager.cs"
 -langversion:9.0
 
 /deterministic

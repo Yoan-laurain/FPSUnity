@@ -8,11 +8,12 @@ ScriptsOnlyBuild:
     - PlayerMotor
     - PlayerSetUp
     - PlayerShoot
+    - UnityStandardAssets.Effects.AfterburnerPhysicsForce
+    - WeaponGraphics
+    - WeaponManager
     Mirror.Components.dll:
     - Mirror.NetworkTransform
     - Mirror.NetworkTransformChild
-    Mirror.Editor.dll:
-    - Mirror.NetworkBehaviourInspector
     Mirror.dll:
     - Mirror.NetworkIdentity
     - Mirror.NetworkManager
@@ -25,9 +26,20 @@ ScriptsOnlyBuild:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    UnityEngine.UI.dll:
+    - UnityEngine.EventSystems.EventSystem
+    - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.CanvasScaler
+    - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.Image
   serializedClasses:
     Assembly-CSharp:
+    - MatchSettings
     - PlayerWeapon
+    UnityEngine.CoreModule:
+    - UnityEngine.Events.PersistentCallGroup
+    UnityEngine.UI:
+    - UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
   methodsToPreserve: []
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
@@ -55,42 +67,62 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 65
       Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 1530}
+    - Class: 114
+      Script: {instanceID: 1532}
+    - Class: 114
       Script: {instanceID: 2096}
     - Class: 114
-      Script: {instanceID: 2688}
+      Script: {instanceID: 2690}
     - Class: 114
-      Script: {instanceID: 3128}
+      Script: {instanceID: 2734}
     - Class: 114
-      Script: {instanceID: 3406}
+      Script: {instanceID: 3132}
     - Class: 114
-      Script: {instanceID: 4756}
+      Script: {instanceID: 3232}
     - Class: 114
-      Script: {instanceID: 4884}
+      Script: {instanceID: 3412}
     - Class: 114
-      Script: {instanceID: 5304}
+      Script: {instanceID: 3638}
     - Class: 114
-      Script: {instanceID: 5366}
+      Script: {instanceID: 4764}
     - Class: 114
-      Script: {instanceID: 6072}
+      Script: {instanceID: 4892}
     - Class: 114
-      Script: {instanceID: 6276}
+      Script: {instanceID: 5312}
     - Class: 114
-      Script: {instanceID: 6480}
+      Script: {instanceID: 5374}
     - Class: 114
-      Script: {instanceID: 8238}
+      Script: {instanceID: 6080}
     - Class: 114
-      Script: {instanceID: 24040}
+      Script: {instanceID: 6280}
     - Class: 114
-      Script: {instanceID: 24044}
+      Script: {instanceID: 6284}
+    - Class: 114
+      Script: {instanceID: 6488}
+    - Class: 114
+      Script: {instanceID: 6830}
+    - Class: 114
+      Script: {instanceID: 8246}
+    - Class: 114
+      Script: {instanceID: 24502}
+    - Class: 114
+      Script: {instanceID: 25976}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 135
@@ -104,6 +136,18 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -290,13 +334,19 @@ ScriptsOnlyBuild:
     className: LookAtMainCamera
   - hash:
       serializedVersion: 2
+      Hash: 9df954eca51e9f2b95915ae2918e4258
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: UnityStandardAssets.Effects
+    className: AfterburnerPhysicsForce
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnBecameVisibleMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 781cddf76ed0d11b0ca96ec6dd487da7
+      Hash: 900a55474ab2e192a3751e62c3d6d9f9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerSetUp
@@ -392,7 +442,7 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
-      Hash: 14dbea751607113b5fabf879a5927a78
+      Hash: 427fba7773d85104c94c90868fb4109d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerShoot
@@ -414,6 +464,12 @@ ScriptsOnlyBuild:
     assemblyName: Mirror.dll
     namespaceName: Mirror
     className: MultiplexTransport
+  - hash:
+      serializedVersion: 2
+      Hash: 9fcea810d49ccf02f21553c9d0eb32af
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GameManager
   - hash:
       serializedVersion: 2
       Hash: 0fd6822f6177297bd0eb4d83cc7a9030
@@ -498,6 +554,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSelectMessageListener
+  - hash:
+      serializedVersion: 2
+      Hash: e3c87ff44c6d8c95adc94acce0d0d4a2
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Player
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -1466,16 +1528,22 @@ ScriptsOnlyBuild:
     className: UnityOnSliderValueChangedMessageListener
   - hash:
       serializedVersion: 2
+      Hash: e9f363bc347a846e5f2ac1e59d8f9946
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WeaponManager
+  - hash:
+      serializedVersion: 2
+      Hash: fbd5fa7806257e09a1945ad1c89c8303
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WeaponGraphics
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: GameManager
-  - hash:
-      serializedVersion: 2
-      Hash: e3c87ff44c6d8c95adc94acce0d0d4a2
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: Player
+    className: Util
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
