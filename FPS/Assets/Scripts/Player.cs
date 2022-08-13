@@ -36,6 +36,15 @@ public class Player : NetworkBehaviour
 
     private bool firstSetup = true;
 
+    public int kills;
+    public int death;
+
+    [SerializeField]
+    private AudioClip hitSound;
+
+    [SerializeField]
+    private AudioClip destroySound;
+
 
     public void SetUp()
     {
@@ -45,6 +54,7 @@ public class Player : NetworkBehaviour
 
             GameManager.instance.SetSceneCameraActive(false);
             GetComponent<PlayerSetUp>().playerUIInstance.SetActive(true);
+
         }
 
         RpcSetupPlayerOnAllClients();
@@ -121,7 +131,7 @@ public class Player : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcTakeDamage(float damage)
+    public void RpcTakeDamage(float damage, string sourceID)
     {
         //Si il est déjà mort 
         if(isDead)
@@ -129,19 +139,35 @@ public class Player : NetworkBehaviour
             return;
         }
 
+        AudioSource sound = GetComponent<AudioSource>();
+
         //On soustrait les pv
         currentHealth -= damage;
 
         //Si il à plus de vie
         if(currentHealth <= 0)
         {
-            Die();
+            Die(sourceID);
+            sound.PlayOneShot(destroySound);
         }
+
+        sound.PlayOneShot(hitSound);
     }
 
-    private void Die()
+    private void Die(string sourceID)
     {
         isDead = true;
+
+        // On récupère celui qui à tué le joueur
+        Player sourcePlayer = GameManager.GetPlayer(sourceID);
+
+        if(sourcePlayer != null)
+        {
+            sourcePlayer.kills++;
+            GameManager.instance.onPlayerKilledCallBack.Invoke(transform.name,sourceID);
+        }
+
+        death++;
 
         // Désactive les components du joueur lors de la mort
         for (int i = 0; i < disableOnDeath.Length; i++)
@@ -174,5 +200,10 @@ public class Player : NetworkBehaviour
         }
 
         StartCoroutine(Respawn());
+    }
+
+    public float GetHealthPct()
+    {
+        return (float)currentHealth / maxHealth;
     }
 }

@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     // On va stocker nos joueurs
-    private static Dictionary<string,Player> players = new Dictionary<string,Player>();
+    private static Dictionary<string, Player> players = new Dictionary<string, Player>();
 
     //Prefix du nom de nos joueur
     private const string playerIdPrefix = "Player";
@@ -15,6 +16,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject sceneCamera;
+
+    public delegate void OnPlayerKilledCallBack(string player, string source);
+    public OnPlayerKilledCallBack onPlayerKilledCallBack;
+
 
     private void Awake()
     {
@@ -53,6 +58,11 @@ public class GameManager : MonoBehaviour
     public static Player GetPlayer(string playerId)
     {
         return players[playerId];
+    }
+
+    public static Player[] GetAllPlayers()
+    {
+        return players.Values.ToArray();
     }
 
 }

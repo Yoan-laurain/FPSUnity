@@ -10,7 +10,7 @@ public class PlayerShoot : NetworkBehaviour
     [SerializeField]
     private LayerMask mask;
 
-    private PlayerWeapon currentWeapon;
+    private WeaponData currentWeapon;
     private WeaponManager weaponManager;
 
     private void Start()
@@ -21,6 +21,13 @@ public class PlayerShoot : NetworkBehaviour
     private void Update()
     {
         currentWeapon = weaponManager.GetCurrentWeapon();
+
+        //Reload
+        if(Input.GetKeyDown(KeyCode.R) && weaponManager.currentMagazineSize < currentWeapon.magazineSize)
+        {
+            StartCoroutine(weaponManager.Reload());
+            return;
+        }
 
         //Coup par coup
         if(currentWeapon.fireRate <= 0f)
@@ -62,13 +69,27 @@ public class PlayerShoot : NetworkBehaviour
     {
         //On joue le système de particules
         weaponManager.GetCurrentGraphics().muzzleFlash.Play();
+
+        // On joue le son du tir
+
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(currentWeapon.shootSound);
     }
 
     [Client]
     private void Shoot()
     {
-        //Ne pas tirer pour les autres joueurs
-        if (!isLocalPlayer) return;
+        //Ne pas tirer pour les autres joueurs ou si on recharge
+        if (!isLocalPlayer || weaponManager.isReloading) return;
+
+        //Si on a plus de balles
+        if (weaponManager.currentMagazineSize <= 0)
+        {
+            StartCoroutine(weaponManager.Reload());
+            return;
+        }
+
+        weaponManager.currentMagazineSize--;
 
         CmdOnShoot();
 
@@ -82,24 +103,28 @@ public class PlayerShoot : NetworkBehaviour
             if(hit.collider.tag == "Player")
             {
                 //On affiche son nom dans la console
-                CmdPlayerShoot(hit.collider.name);
+                CmdPlayerShoot(hit.collider.name,currentWeapon.damage,transform.name);
             }
 
             CmdOnHit(hit.point,hit.normal);
 
         }
 
+        if (weaponManager.currentMagazineSize <= 0)
+        {
+            StartCoroutine(weaponManager.Reload());
+            return;
+        }
+
     }
 
     //Grâce à command toutes les infos dedans sont envoyés au serveur et partagé dans toutes les instances
     [Command]
-    private void CmdPlayerShoot(string playerId)
+    private void CmdPlayerShoot(string playerId,float damage, string sourceID)
     {
-        Debug.Log(playerId + " a été touché");
-
         Player player = GameManager.GetPlayer(playerId);
 
-        player.RpcTakeDamage(currentWeapon.damage);
+        player.RpcTakeDamage(damage, sourceID);
     }
 
     [Command]

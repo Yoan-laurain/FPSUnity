@@ -1,15 +1,32 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField]
     private RectTransform thrusterFuelFill;
 
-    private PlayerController controller;
+    [SerializeField]
+    private RectTransform healthBarFill;
 
-    public void SetController(PlayerController _controller)
+    private PlayerController controller;
+    private Player player;
+    private WeaponManager manager;
+
+    [SerializeField]
+    private GameObject scoreBoard;
+
+    [SerializeField]
+    private TMP_Text healthPoint;
+
+    [SerializeField]
+    private TMP_Text ammoText;
+
+    public void SetPlayer(Player _player)
     {
-        controller = _controller;
+        player = _player;
+        controller = player.GetComponent<PlayerController>();   
+        manager = player.GetComponent<WeaponManager>();
     }
 
     void SetFuelAmount(float amount)
@@ -17,8 +34,33 @@ public class PlayerUI : MonoBehaviour
         thrusterFuelFill.localScale = new Vector3(amount, 1f, 1f);
     }
 
+    void SetHealthBarAmount(float amount)
+    {
+        healthBarFill.localScale = new Vector3(amount, 1f, 1f);
+        healthPoint.text = Mathf.Round(player.GetHealthPct() * 100).ToString();
+    }
+
+    void SetAmmoAmount(int currentAmmo)
+    {
+        Debug.Log("HERE");
+        ammoText.text = currentAmmo + "/" + manager.GetCurrentWeapon().magazineSize ;
+    }
+
     private void Update()
     {
         SetFuelAmount(controller.GetThrusterFuelAmount());
+
+        SetHealthBarAmount(player.GetHealthPct());
+
+        SetAmmoAmount(manager.currentMagazineSize);
+
+        if (Input.GetKeyDown(KeyCode.Tab) ) 
+        {
+            scoreBoard.SetActive(true);
+        }
+        else if(Input.GetKeyUp(KeyCode.Tab))
+        {
+            scoreBoard.SetActive(false);
+        }
     }
 }
